@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Value Talent Advisory</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #faf6ed; --cream-deep: #f0e9d2;
+  --forest: #1a3528; --forest-mid: #2c5040; --forest-light: #3d6b58;
+  --gold: #b8922a; --gold-light: #d4aa4e;
+  --text: #1e1e1e; --text-muted: #7a7269;
+  --white: #ffffff; --border: #e3d9c4;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', sans-serif; background: var(--white); color: var(--text); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 6%; display: flex; align-items: center; justify-content: space-between;
+  height: 70px; transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(26,53,40,0.08); }
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.2rem;
+  color: var(--forest); letter-spacing: 0.02em; cursor: pointer;
+}
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links li a {
+  text-decoration: none; color: var(--text-muted); font-size: 0.82rem; font-weight: 500;
+  letter-spacing: 0.03em; padding: 0.5rem 1.1rem; border-radius: 4px;
+  transition: color 0.2s, background 0.2s; display: block;
+}
+.nav-links li a:hover, .nav-links li a.active { color: var(--forest); background: var(--cream); }
+.btn-nav {
+  background: var(--forest); color: var(--white); border: none;
+  padding: 0.55rem 1.3rem; border-radius: 5px;
+  font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; text-decoration: none; letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-nav:hover { background: var(--forest-mid); transform: translateY(-1px); }
+
+/* PAGES */
+.page { display: none; min-height: 100vh; padding-top: 70px; }
+.page.active { display: block; }
+
+/* BUTTONS */
+.btn-primary {
+  display: inline-block; background: var(--forest); color: var(--white);
+  padding: 0.8rem 2rem; border-radius: 5px; text-decoration: none;
+  font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; border: none; transition: all 0.25s;
+}
+.btn-primary:hover { background: var(--forest-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,53,40,0.2); }
+.btn-outline {
+  display: inline-block; background: transparent; color: var(--forest);
+  padding: 0.8rem 2rem; border-radius: 5px; text-decoration: none;
+  font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; border: 1.5px solid var(--forest); transition: all 0.25s;
+}
+.btn-outline:hover { background: var(--forest); color: var(--white); transform: translateY(-2px); }
+
+/* HELPERS */
+.section-label {
+  display: block; font-size: 0.68rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 700; color: var(--forest); line-height: 1.12;
+}
+.accent-bar { width: 44px; height: 3px; background: var(--gold); border-radius: 2px; margin: 0.9rem 0 2.2rem; }
+.accent-bar.center { margin: 0.9rem auto 2.2rem; }
+.max-w { max-width: 1200px; margin: 0 auto; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════
+   HOME PAGE
+══════════════════════════════ */
+.home-hero {
+  min-height: calc(100vh - 70px);
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 4rem; padding: 80px 6% 60px;
+  background: var(--white); position: relative; overflow: hidden;
+}
+.home-hero::after {
+  content: ''; position: absolute; right: -8%; top: 0; bottom: 0; width: 52%;
+  background: var(--cream); z-index: 0; border-radius: 60px 0 0 60px;
+}
+.hero-left { position: relative; z-index: 1; }
+.hero-right { position: relative; z-index: 1; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 1.4rem;
+  opacity: 0; animation: fadeUp 0.8s ease 0.1s forwards;
+}
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1.5px; background: var(--gold); }
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 700; color: var(--forest);
+  font-size: clamp(2.8rem, 5vw, 4.4rem); line-height: 1.08; margin-bottom: 1.4rem;
+  opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+}
+.hero-h1 em { font-style: italic; color: var(--forest-light); }
+.hero-sub {
+  font-size: 1rem; color: var(--text-muted); line-height: 1.75;
+  max-width: 440px; margin-bottom: 2.5rem; font-weight: 300;
+  opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+}
+.hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
+}
+.hero-img-box {
+  background: var(--cream-deep); border-radius: 16px; aspect-ratio: 4/5; max-height: 520px;
+  display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+  font-size: 0.85rem; border: 1px dashed #c8b88a; position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp 0.9s ease 0.4s forwards;
+}
+.hero-badge {
+  position: absolute; bottom: 24px; left: -16px;
+  background: var(--forest); color: var(--white);
+  padding: 1rem 1.4rem; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(26,53,40,0.25);
+}
+.badge-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+.badge-lbl { font-size: 0.68rem; opacity: 0.75; font-weight: 300; letter-spacing: 0.05em; }
+
+/* Logo bar */
+.logo-bar {
+  background: var(--cream); padding: 28px 6%;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.logo-bar-label {
+  text-align: center; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600; margin-bottom: 1.3rem;
+}
+.logo-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 3rem; flex-wrap: wrap;
+}
+.logo-pill {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600;
+  color: var(--text-muted); letter-spacing: 0.04em; opacity: 0.55; transition: opacity 0.2s;
+}
+.logo-pill:hover { opacity: 1; }
+
+/* Founder snapshot */
+.founder-snapshot { display: grid; grid-template-columns: 1fr 1fr; }
+.founder-img-col {
+  min-height: 520px; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
+  position: relative; overflow: hidden;
+}
+.founder-ph {
+  width: 100%; height: 100%; min-height: 520px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.25); gap: 0.8rem; font-size: 0.78rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+.founder-text-col {
+  background: var(--cream); padding: 80px 60px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.founder-quote {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-style: italic;
+  color: var(--forest); line-height: 1.5; margin-bottom: 1.8rem;
+  border-left: 3px solid var(--gold); padding-left: 1.4rem;
+}
+.founder-bio-short { font-size: 0.92rem; line-height: 1.8; color: var(--text-muted); font-weight: 300; margin-bottom: 2rem; }
+
+/* Posts grid */
+.posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.post-card {
+  border: 1px solid var(--border); border-radius: 12px; padding: 1.6rem;
+  transition: box-shadow 0.25s, transform 0.25s; background: var(--white);
+}
+.post-card:hover { box-shadow: 0 8px 30px rgba(26,53,40,0.09); transform: translateY(-3px); }
+.post-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+.post-avatar {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--cream-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1rem; color: var(--forest); flex-shrink: 0;
+}
+.post-author { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.post-role { font-size: 0.72rem; color: var(--text-muted); font-weight: 300; }
+.post-li { margin-left: auto; color: #0077b5; font-size: 0.78rem; font-weight: 700; }
+.post-text { font-size: 0.88rem; line-height: 1.72; color: var(--text); font-weight: 300; }
+.post-tag { display: inline-block; margin-top: 1rem; font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+
+/* Case studies */
+.cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.case-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: box-shadow 0.25s, transform 0.25s; }
+.case-card:hover { box-shadow: 0 12px 40px rgba(26,53,40,0.1); transform: translateY(-4px); }
+.case-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+.ci1 { background: linear-gradient(135deg, #1a3528, #3d6b58); }
+.ci2 { background: linear-gradient(135deg, #2c2318, #6b4e2a); }
+.ci3 { background: linear-gradient(135deg, #1a2535, #2d4a6b); }
+.case-body { padding: 1.5rem; background: var(--white); }
+.case-tag { font-size: 0.66rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 0.5rem; display: block; }
+.case-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--forest); margin-bottom: 0.6rem; line-height: 1.3; }
+.case-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; font-weight: 300; }
+.case-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; font-weight: 600; color: var(--forest-light); text-decoration: none; margin-top: 1rem; letter-spacing: 0.05em; text-transform: uppercase; transition: gap 0.2s; }
+.case-link:hover { gap: 0.6rem; }
+
+/* TL strip */
+.tl-strip { background: var(--forest); padding: 80px 6%; }
+.tl-strip .section-title { color: var(--white); }
+.tl-strip .section-label { color: var(--gold-light); }
+.tl-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; }
+.tl-more { color: var(--gold-light); font-size: 0.8rem; text-decoration: none; font-weight: 500; letter-spacing: 0.05em; }
+.tl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.tl-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 1.5rem; transition: background 0.25s; cursor: pointer; }
+.tl-card:hover { background: rgba(255,255,255,0.1); }
+.tl-cat { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-light); font-weight: 600; margin-bottom: 0.7rem; }
+.tl-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: rgba(255,255,255,0.88); font-weight: 600; line-height: 1.4; }
+
+/* CTA band */
+.cta-band { background: var(--cream-deep); padding: 80px 6%; text-align: center; position: relative; overflow: hidden; }
+.cta-band::before {
+  content: '"'; font-family: 'Cormorant Garamond', serif; font-size: 20rem;
+  color: rgba(201,168,76,0.08); position: absolute; top: -4rem; left: 2rem;
+  line-height: 1; pointer-events: none; z-index: 0;
+}
+.cta-band > * { position: relative; z-index: 1; }
+.cta-band-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; color: var(--forest); margin-bottom: 0.9rem; line-height: 1.2; }
+.cta-band-sub { font-size: 0.95rem; color: var(--text-muted); font-weight: 300; margin-bottom: 2.5rem; }
+.cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* section spacing */
+.sec { padding: 90px 6%; }
+.sec-sm { padding: 70px 6%; }
+
+/* ══════════════════════════════
+   ABOUT PAGE
+══════════════════════════════ */
+.about-hero { background: var(--cream); padding: 90px 6% 80px; }
+.about-hero-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.about-hero-img {
+  border-radius: 16px; aspect-ratio: 4/5; max-height: 560px;
+  background: var(--cream-deep); display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 0.85rem; border: 1px dashed #c8b88a;
+}
+.about-name { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--forest); line-height: 1.08; margin-bottom: 0.3rem; }
+.about-rtag { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 2rem; display: block; }
+.about-bio { font-size: 0.93rem; line-height: 1.85; color: var(--text); font-weight: 300; margin-bottom: 1rem; }
+.about-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--forest); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: 1rem; border-bottom: 2px solid var(--gold); padding-bottom: 2px; transition: color 0.2s; }
+.about-link:hover { color: var(--gold); }
+
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; max-width: 1100px; margin: 0 auto; }
+.val-card { padding: 2rem; border-top: 3px solid var(--forest); background: var(--cream); border-radius: 0 0 10px 10px; }
+.val-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.val-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--forest); margin-bottom: 0.6rem; }
+.val-text { font-size: 0.85rem; line-height: 1.72; color: var(--text-muted); font-weight: 300; }
+
+.book-band { background: var(--forest); padding: 80px 6%; }
+.book-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 4rem; align-items: center; }
+.book-cover { width: 170px; height: 250px; background: var(--cream-deep); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; color: var(--text-muted); border: 1px dashed #c8b88a; text-align: center; padding: 1rem; flex-shrink: 0; }
+.book-label { font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); font-weight: 600; margin-bottom: 0.8rem; display: block; }
+.book-title { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700; color: var(--white); margin-bottom: 0.8rem; line-height: 1.2; }
+.book-text { font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.65); font-weight: 300; }
+
+/* ══════════════════════════════
+   SERVICES PAGE
+══════════════════════════════ */
+.services-hero { background: var(--cream); padding: 90px 6% 70px; text-align: center; }
+.services-hero-sub { font-size: 1.02rem; color: var(--text-muted); font-weight: 300; max-width: 560px; margin: 0 auto; line-height: 1.75; }
+
+.svc-block { max-width: 1100px; margin: 0 auto 5rem; }
+.svc-block:last-child { margin-bottom: 0; }
+.svc-inner { display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; align-items: start; }
+.svc-inner.flip { grid-template-columns: 1.3fr 1fr; }
+.svc-inner.flip .svc-info { order: 2; }
+.svc-inner.flip .svc-sol { order: 1; }
+.svc-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 700; color: var(--cream-deep); line-height: 1; margin-bottom: -0.5rem; }
+.svc-name { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700; color: var(--forest); margin-bottom: 1rem; line-height: 1.2; }
+.svc-desc { font-size: 0.92rem; line-height: 1.8; color: var(--text-muted); font-weight: 300; margin-bottom: 1.5rem; }
+.svc-q-lbl { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 0.8rem; display: block; }
+.svc-qs { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.svc-qs li { font-size: 0.85rem; color: var(--text); font-weight: 300; padding-left: 1.2rem; position: relative; line-height: 1.5; }
+.svc-qs li::before { content: '→'; position: absolute; left: 0; color: var(--gold); }
+.sol-box { background: var(--cream); border-radius: 12px; padding: 2rem; }
+.sol-box-lbl { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 1.2rem; display: block; }
+.sol-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+.sol-list li { font-size: 0.88rem; color: var(--text); font-weight: 400; display: flex; align-items: flex-start; gap: 0.7rem; line-height: 1.4; }
+.sol-list li::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 0.45rem; }
+.svc-divider { max-width: 1100px; margin: 0 auto 4rem; border: 0; border-top: 1px solid var(--border); }
+
+/* ══════════════════════════════
+   WHY US PAGE
+══════════════════════════════ */
+.why-hero { background: var(--forest); padding: 100px 6% 80px; position: relative; overflow: hidden; }
+.why-hero::before { content: ''; position: absolute; right: -5%; top: -10%; width: 50%; height: 130%; background: rgba(255,255,255,0.025); border-radius: 50%; }
+.why-hero-inner { max-width: 860px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.why-hero .section-title { color: var(--white); font-size: clamp(2.2rem, 4vw, 3.5rem); }
+.why-hero .section-label { color: var(--gold-light); }
+.why-hero .accent-bar { background: var(--gold-light); }
+.why-hero-sub { font-size: 1.02rem; color: rgba(255,255,255,0.6); font-weight: 300; line-height: 1.75; max-width: 540px; margin: 0 auto; }
+
+.why-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+.why-card { padding: 2rem; border: 1px solid var(--border); border-radius: 12px; transition: box-shadow 0.25s, transform 0.25s; }
+.why-card:hover { box-shadow: 0 8px 30px rgba(26,53,40,0.08); transform: translateY(-2px); }
+.why-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.why-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--forest); margin-bottom: 0.6rem; }
+.why-text { font-size: 0.88rem; line-height: 1.72; color: var(--text-muted); font-weight: 300; }
+
+.process-sec { background: var(--cream); padding: 90px 6%; }
+.process-inner { max-width: 920px; margin: 0 auto; }
+.ptimeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+.ptimeline::before { content: ''; position: absolute; left: 32px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+.pstep { display: grid; grid-template-columns: 80px 1fr; gap: 2rem; align-items: flex-start; padding-bottom: 3rem; position: relative; z-index: 1; }
+.pstep:last-child { padding-bottom: 0; }
+.pdot { width: 64px; height: 64px; border-radius: 50%; background: var(--white); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.4rem; }
+.pnum { font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 0.4rem; display: block; }
+.ptitle { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--forest); margin-bottom: 0.6rem; }
+.pdesc { font-size: 0.88rem; line-height: 1.75; color: var(--text-muted); font-weight: 300; }
+
+/* ══════════════════════════════
+   CONTACT PAGE
+══════════════════════════════ */
+.contact-hero { background: var(--cream); padding: 90px 6% 70px; text-align: center; }
+.contact-main { padding: 70px 6%; background: var(--white); }
+.contact-grid { max-width: 880px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 5rem; }
+.form-group { margin-bottom: 1.4rem; }
+label { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); margin-bottom: 0.5rem; }
+input, textarea {
+  width: 100%; padding: 0.85rem 1.1rem; border: 1.5px solid var(--border); border-radius: 7px;
+  background: var(--cream); font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text);
+  transition: border-color 0.2s, background 0.2s; outline: none;
+}
+input:focus, textarea:focus { border-color: var(--forest); background: var(--white); }
+textarea { resize: vertical; min-height: 120px; }
+.ci-lbl { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 0.3rem; display: block; }
+.ci-val { font-size: 0.95rem; color: var(--forest); font-weight: 500; }
+.ci-sub { font-size: 0.78rem; color: var(--text-muted); font-weight: 300; margin-top: 0.15rem; }
+.c-divider { border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+.c-highlight { background: var(--cream); border-radius: 10px; padding: 1.4rem; }
+
+/* FOOTER */
+footer { background: var(--forest); color: rgba(255,255,255,0.45); padding: 2.5rem 6%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.1rem; color: rgba(255,255,255,0.9); }
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-links a { text-decoration: none; color: rgba(255,255,255,0.45); font-size: 0.8rem; transition: color 0.2s; }
+.footer-links a:hover { color: rgba(255,255,255,0.9); }
+.footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .home-hero { grid-template-columns: 1fr; text-align: center; }
+  .home-hero::after { display: none; }
+  .hero-right { display: none; }
+  .hero-sub { max-width: 100%; }
+  .hero-ctas { justify-content: center; }
+  .founder-snapshot, .about-hero-inner, .book-inner, .contact-grid { grid-template-columns: 1fr; }
+  .posts-grid, .cases-grid, .tl-grid, .values-grid, .why-cards { grid-template-columns: 1fr; }
+  .svc-inner, .svc-inner.flip { grid-template-columns: 1fr; }
+  .svc-inner.flip .svc-info, .svc-inner.flip .svc-sol { order: unset; }
+  .nav-links { display: none; }
+  .tl-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .founder-text-col { padding: 50px 30px; }
+  .contact-grid { gap: 3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="goTo('home')">Value Talent Advisory</div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="goTo('home')" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="goTo('about')" id="nav-about">About</a></li>
+    <li><a href="#" onclick="goTo('services')" id="nav-services">Services</a></li>
+    <li><a href="#" onclick="goTo('whyus')" id="nav-whyus">Why Us</a></li>
+    <li><a href="#" onclick="goTo('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <!-- Nav order: Home → About → Services → Why Us → Contact -->
+  <a href="#" onclick="goTo('contact')" class="btn-nav">Get in Touch</a>
+</nav>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <div class="home-hero">
+    <div class="hero-left">
+      <span class="hero-eyebrow">Strategic Talent Consulting</span>
+      <h1 class="hero-h1">Build Talent Systems That<br><em>Scale With Your Business</em></h1>
+      <p class="hero-sub">Helping growth-stage organisations align people strategy with performance and long-term ambition. Partnering directly with promoters and leadership teams.</p>
+      <div class="hero-ctas">
+        <a href="#" onclick="goTo('contact')" class="btn-primary">Book a Consultation</a>
+        <a href="#" onclick="goTo('services')" class="btn-outline">Explore Services</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-box">
+        <span>Founder Photo</span>
+        <div class="hero-badge">
+          <div class="badge-num">10+</div>
+          <div class="badge-lbl">Years Advisory Experience</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logo bar -->
+  <div class="logo-bar">
+    <div class="logo-bar-label">Trusted by growth-stage organisations across sectors</div>
+    <div class="logo-row">
+      <span class="logo-pill">Manufacturing</span>
+      <span class="logo-pill">Financial Services</span>
+      <span class="logo-pill">Technology</span>
+      <span class="logo-pill">Consumer Goods</span>
+      <span class="logo-pill">Healthcare</span>
+      <span class="logo-pill">Professional Services</span>
+    </div>
+  </div>
+
+  <!-- Founder Snapshot -->
+  <div class="founder-snapshot">
+    <div class="founder-img-col">
+      <div class="founder-ph">
+        <svg width="70" height="70" viewBox="0 0 24 24" fill="rgba(255,255,255,0.2)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        <span>Founder Photo</span>
+      </div>
+    </div>
+    <div class="founder-text-col">
+      <span class="section-label">Meet the Founder</span>
+      <h2 class="section-title" style="font-size:2.4rem;">Vaishnavi Chella</h2>
+      <div class="accent-bar"></div>
+      <blockquote class="founder-quote">"Talent is not a support function — it is a strategic lever for competitive advantage and long-term sustainability."</blockquote>
+      <p class="founder-bio-short">A seasoned consultant and trusted advisor to promoters and senior leadership teams of growth-stage organisations. Vaishnavi partners directly with founders to help businesses navigate critical talent and leadership inflexion points — growth, professionalisation, succession, and cultural realignment.</p>
+      <a href="#" onclick="goTo('about')" class="btn-primary" style="align-self:flex-start; margin-top:0.5rem;">Read Full Story →</a>
+    </div>
+  </div>
+
+  <!-- Client Voices -->
+  <section class="sec" style="background:var(--white);">
+    <div class="max-w">
+      <span class="section-label">What People Are Saying</span>
+      <h2 class="section-title">Client Voices</h2>
+      <div class="accent-bar"></div>
+      <div class="posts-grid">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div>
+              <div class="post-author">Rohit Mehta</div>
+              <div class="post-role">CEO, Series B Technology Company</div>
+            </div>
+            <div class="post-li">in</div>
+          </div>
+          <p class="post-text">"Vaishnavi helped us move from chaos to clarity. We now have a role architecture and performance framework that actually matches how we want to grow. The diagnostic approach surfaced issues we didn't even know were holding us back."</p>
+          <span class="post-tag">Organisational Systems</span>
+        </div>
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">P</div>
+            <div>
+              <div class="post-author">Priya Nair</div>
+              <div class="post-role">Managing Director, Family Business Group</div>
+            </div>
+            <div class="post-li">in</div>
+          </div>
+          <p class="post-text">"The succession planning work Vaishnavi facilitated was genuinely transformative. For the first time, our family business has a structured conversation around leadership continuity. She brought rigour without losing the human element."</p>
+          <span class="post-tag">Leadership Pipeline</span>
+        </div>
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">A</div>
+            <div>
+              <div class="post-author">Arjun Kapoor</div>
+              <div class="post-role">Founder & Promoter, Consumer Brand</div>
+            </div>
+            <div class="post-li">in</div>
+          </div>
+          <p class="post-text">"As a founder, I was always the one driving culture informally. Vaishnavi helped us codify what we stood for and anchor it in actual behaviours. Our engagement scores improved — but more importantly, the team just 'feels' different now."</p>
+          <span class="post-tag">Culture & Values</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="sec" style="background:var(--cream);">
+    <div class="max-w">
+      <span class="section-label">Case Studies</span>
+      <h2 class="section-title">Work in Action</h2>
+      <div class="accent-bar"></div>
+      <div class="cases-grid">
+        <div class="case-card">
+          <div class="case-img ci1">🏗️</div>
+          <div class="case-body">
+            <span class="case-tag">Org Design · Manufacturing</span>
+            <div class="case-title">Restructuring a 500-Person Organisation for Scale</div>
+            <p class="case-desc">A fast-growing manufacturing group needed clarity across business units. Designed a new org structure, job architecture, and accountability framework — enabling them to double headcount without doubling confusion.</p>
+            <a href="#" class="case-link">Coming Soon →</a>
+          </div>
+        </div>
+        <div class="case-card">
+          <div class="case-img ci2">🌱</div>
+          <div class="case-body">
+            <span class="case-tag">Succession · Family Business</span>
+            <div class="case-title">Building a Leadership Pipeline for Generational Transition</div>
+            <p class="case-desc">A second-generation family business sought to professionalise leadership before a major ownership transition. Facilitated high-potential identification, succession mapping, and development journeys for 12 senior leaders.</p>
+            <a href="#" class="case-link">Coming Soon →</a>
+          </div>
+        </div>
+        <div class="case-card">
+          <div class="case-img ci3">🧭</div>
+          <div class="case-body">
+            <span class="case-tag">Culture · Technology</span>
+            <div class="case-title">Anchoring Values During Rapid Headcount Growth</div>
+            <p class="case-desc">A VC-backed startup tripling headcount in 18 months needed to preserve its culture as it scaled. Developed EVP, articulated core values with behavioural anchors, and designed a culture onboarding journey.</p>
+            <a href="#" class="case-link">Coming Soon →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Thought Leadership -->
+  <section class="tl-strip">
+    <div class="max-w">
+      <div class="tl-header">
+        <div>
+          <span class="section-label">Thought Leadership</span>
+          <h2 class="section-title">Latest Insights</h2>
+        </div>
+        <a href="#" class="tl-more">View All Articles →</a>
+      </div>
+      <div class="tl-grid">
+        <div class="tl-card"><div class="tl-cat">Culture & Bias</div><div class="tl-title">The Sorting Hat of Life: How Affinity Bias Shapes How We Think</div></div>
+        <div class="tl-card"><div class="tl-cat">Workplace Policy</div><div class="tl-title">From Women-friendly to Family-friendly Organizations</div></div>
+        <div class="tl-card"><div class="tl-cat">Engagement</div><div class="tl-title">The Truth Behind Employee Engagement: A First Principles Lens</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <h2 class="cta-band-title">Ready to build talent systems<br>that scale with your ambition?</h2>
+    <p class="cta-band-sub">Let's start with a conversation. No obligation, just clarity.</p>
+    <div class="cta-row">
+      <a href="#" onclick="goTo('contact')" class="btn-primary">Book a Consultation</a>
+      <a href="#" onclick="goTo('services')" class="btn-outline">Explore Our Services</a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Value Talent Advisory</span>
+    <div class="footer-links">
+      <a href="#" onclick="goTo('home')">Home</a><a href="#" onclick="goTo('about')">About</a>
+      <a href="#" onclick="goTo('services')">Services</a><a href="#" onclick="goTo('whyus')">Why Us</a>
+      <a href="#" onclick="goTo('contact')">Contact</a>
+    </div>
+    <span class="footer-copy">© 2025 Value Talent Advisory. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<div id="page-about" class="page">
+  <div class="about-hero">
+    <div class="about-hero-inner">
+      <div class="about-hero-img">Founder Photo</div>
+      <div>
+        <span class="section-label">About the Founder</span>
+        <h1 class="about-name">Vaishnavi<br>Chella</h1>
+        <span class="about-rtag">Principal Consultant & Founder</span>
+        <div class="accent-bar"></div>
+        <p class="about-bio">Vaishnavi Chella is a seasoned consultant and trusted advisor to promoters and senior leadership teams of growth-stage organisations. She partners directly with founders and leadership teams to help businesses navigate critical talent and leadership inflexion points — particularly during phases of rapid growth, professionalisation, succession transition, or cultural realignment.</p>
+        <p class="about-bio">Her work focuses on strengthening organisational capability so that ambition is supported by structure, leadership depth, and aligned culture. She works closely with promoters to surface unarticulated leadership challenges — bench strength gaps, cultural misalignment, performance ambiguity, succession risk — and translate them into structured, scalable talent systems.</p>
+        <p class="about-bio">Her advisory approach is diagnostic-led, outcome-oriented, and deeply contextual. Beyond consulting, Vaishnavi publishes regularly on emerging workforce themes and leadership maturity in India.</p>
+        <a href="https://linkedin.com" class="about-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          Connect on LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec" style="background:var(--white);">
+    <div style="max-width:1100px;margin:0 auto;">
+      <span class="section-label">Our Philosophy</span>
+      <h2 class="section-title">How We Think</h2>
+      <div class="accent-bar"></div>
+      <div class="values-grid">
+        <div class="val-card"><div class="val-icon">🔍</div><div class="val-title">Diagnostic-Led</div><p class="val-text">We never prescribe before we understand. Every engagement begins with a rigorous diagnostic that surfaces real challenges — not just presenting symptoms.</p></div>
+        <div class="val-card"><div class="val-icon">🎯</div><div class="val-title">Outcome-Oriented</div><p class="val-text">Every intervention is anchored in tangible business results and talent milestones. Good intentions don't move organisations forward — measurable outcomes do.</p></div>
+        <div class="val-card"><div class="val-icon">🌿</div><div class="val-title">Deeply Contextual</div><p class="val-text">We adapt proven models to the organisation's unique stage, industry, and leadership realities. There are no one-size-fits-all frameworks here.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TL on About -->
+  <section class="sec" style="background:var(--cream);">
+    <div class="max-w">
+      <span class="section-label">Published Work</span>
+      <h2 class="section-title">Thought Leadership</h2>
+      <div class="accent-bar"></div>
+      <div class="posts-grid">
+        <div class="post-card"><div class="tl-cat" style="color:var(--gold);font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">Culture</div><div class="case-title" style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--forest);line-height:1.35;">The Sorting Hat of Life: How Affinity Bias Shapes How We Think</div></div>
+        <div class="post-card"><div class="tl-cat" style="color:var(--gold);font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">Workplace</div><div class="case-title" style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--forest);line-height:1.35;">From Women-friendly to Family-friendly Organizations</div></div>
+        <div class="post-card"><div class="tl-cat" style="color:var(--gold);font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">Org Design</div><div class="case-title" style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--forest);line-height:1.35;">Musings on Organization Design</div></div>
+        <div class="post-card"><div class="tl-cat" style="color:var(--gold);font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">Engagement</div><div class="case-title" style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--forest);line-height:1.35;">The Truth Behind Employee Engagement: A First Principles Lens</div></div>
+        <div class="post-card"><div class="tl-cat" style="color:var(--gold);font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">Leadership</div><div class="case-title" style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--forest);line-height:1.35;">The Leaders We Celebrate</div></div>
+        <div class="post-card"><div class="tl-cat" style="color:var(--gold);font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">DEI</div><div class="case-title" style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--forest);line-height:1.35;">DEI: By India, For India, Of India</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="book-band">
+    <div class="book-inner">
+      <div class="book-cover">Book Cover<br><br><em style="font-size:0.7rem;">(Upcoming)</em></div>
+      <div>
+        <span class="book-label">Upcoming Book</span>
+        <h2 class="book-title">The Journey of Indian Working Mothers</h2>
+        <p class="book-text">Vaishnavi is currently authoring a book that explores the journeys of Indian working mothers — examining how ambition, caregiving, and identity intersect in contemporary professional life. A deeply personal and research-grounded work on one of India's most urgent conversations.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Value Talent Advisory</span>
+    <div class="footer-links"><a href="#" onclick="goTo('home')">Home</a><a href="#" onclick="goTo('about')">About</a><a href="#" onclick="goTo('services')">Services</a><a href="#" onclick="goTo('whyus')">Why Us</a><a href="#" onclick="goTo('contact')">Contact</a></div>
+    <span class="footer-copy">© 2025 Value Talent Advisory. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<div id="page-services" class="page">
+  <div class="services-hero">
+    <span class="section-label">What We Do</span>
+    <h1 class="section-title" style="font-size:clamp(2.2rem,4vw,3.5rem);">Our Services</h1>
+    <div class="accent-bar center"></div>
+    <p class="services-hero-sub">Three interconnected areas that form the foundation of any scalable, high-performing organisation.</p>
+  </div>
+
+  <div class="sec" style="background:var(--white);">
+    <div class="svc-block">
+      <div class="svc-inner">
+        <div class="svc-info">
+          <div class="svc-num">01</div>
+          <div class="svc-name">Building Organisational Systems</div>
+          <p class="svc-desc">Designing the structural foundations that enable clarity, accountability, and performance at scale. The bedrock — without it, everything becomes fragile as you grow.</p>
+          <span class="svc-q-lbl">Questions We Help Answer</span>
+          <ul class="svc-qs">
+            <li>How should our organisation be structured for the next phase of growth?</li>
+            <li>What job architecture and levels will enable scale without bureaucracy?</li>
+            <li>What critical capabilities must we build?</li>
+            <li>How should performance and rewards be aligned to business outcomes?</li>
+            <li>How do we design roles that drive ownership and accountability?</li>
+          </ul>
+        </div>
+        <div class="svc-sol">
+          <div class="sol-box">
+            <span class="sol-box-lbl">Solutions</span>
+            <ul class="sol-list">
+              <li>Job Banding & Role Evaluation</li><li>Organisation Structure Design</li>
+              <li>Workforce Capability Mapping</li><li>Performance Management Architecture</li>
+              <li>Competency Framework Design</li><li>Talent Acquisition Strategy Effectiveness</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="svc-divider">
+    <div class="svc-block">
+      <div class="svc-inner flip">
+        <div class="svc-info">
+          <div class="svc-num">02</div>
+          <div class="svc-name">Strengthening the Talent & Leadership Pipeline</div>
+          <p class="svc-desc">Building structured processes to identify, develop, and retain high-impact talent — ensuring leadership continuity and bench strength for whatever comes next.</p>
+          <span class="svc-q-lbl">Questions We Help Answer</span>
+          <ul class="svc-qs">
+            <li>How do we identify and differentiate high-potential talent?</li>
+            <li>How do we retain and accelerate our top performers?</li>
+            <li>How do we strengthen manager effectiveness?</li>
+            <li>How do we build a credible succession pipeline?</li>
+            <li>How do we institutionalise talent reviews and calibration?</li>
+          </ul>
+        </div>
+        <div class="svc-sol">
+          <div class="sol-box">
+            <span class="sol-box-lbl">Solutions</span>
+            <ul class="sol-list">
+              <li>High Potential Identification Frameworks</li><li>Succession Planning Architecture</li>
+              <li>Assessment & Development Centres</li><li>Leadership Development Journeys</li>
+              <li>Manager Effectiveness Programs</li><li>Talent Reviews & Calibration Facilitation</li>
+              <li>Individual Development Planning</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="svc-divider">
+    <div class="svc-block">
+      <div class="svc-inner">
+        <div class="svc-info">
+          <div class="svc-num">03</div>
+          <div class="svc-name">Reinforcing Values & Culture</div>
+          <p class="svc-desc">Helping organisations articulate and activate the cultural foundations required for sustainable growth. Culture is either designed intentionally — or it drifts.</p>
+          <span class="svc-q-lbl">What This Includes</span>
+          <ul class="svc-qs">
+            <li>Defining non-negotiable values and behaviours</li>
+            <li>Anchoring culture through leadership modelling</li>
+            <li>Designing EVP and employer positioning</li>
+            <li>Strengthening employee engagement</li>
+            <li>Building inclusive, psychologically safe workplaces</li>
+          </ul>
+        </div>
+        <div class="svc-sol">
+          <div class="sol-box">
+            <span class="sol-box-lbl">Solutions</span>
+            <ul class="sol-list">
+              <li>Employee Engagement Diagnostics</li><li>EVP Articulation & Activation</li>
+              <li>Culture & Values Workshops</li><li>Behavioural Anchoring of Values</li>
+              <li>Change & Culture Alignment Interventions</li><li>DEI Strategy & Inclusion Frameworks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h2 class="cta-band-title">Not sure which service is right for you?</h2>
+    <p class="cta-band-sub">Start with a conversation. We'll help you identify where to focus first.</p>
+    <div class="cta-row"><a href="#" onclick="goTo('contact')" class="btn-primary">Get in Touch</a></div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Value Talent Advisory</span>
+    <div class="footer-links"><a href="#" onclick="goTo('home')">Home</a><a href="#" onclick="goTo('about')">About</a><a href="#" onclick="goTo('services')">Services</a><a href="#" onclick="goTo('whyus')">Why Us</a><a href="#" onclick="goTo('contact')">Contact</a></div>
+    <span class="footer-copy">© 2025 Value Talent Advisory. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- ═══════════════ WHY US ═══════════════ -->
+<div id="page-whyus" class="page">
+  <div class="why-hero">
+    <div class="why-hero-inner">
+      <span class="section-label">Why Choose Us</span>
+      <h1 class="section-title">Why Value Talent Advisory</h1>
+      <div class="accent-bar center"></div>
+      <p class="why-hero-sub">A diagnostic-led, outcome-oriented advisory that goes beyond frameworks — partnering with you to build systems that last.</p>
+    </div>
+  </div>
+
+  <section class="sec" style="background:var(--white);">
+    <div style="max-width:1100px;margin:0 auto;">
+      <span class="section-label">Our Differentiation</span>
+      <h2 class="section-title">What Sets Us Apart</h2>
+      <div class="accent-bar"></div>
+      <div class="why-cards">
+        <div class="why-card"><div class="why-icon">🔬</div><div class="why-title">Structured & Research-Driven</div><p class="why-text">We bring rigour to every engagement. Grounded in organisational science and adapted to your specific context — not copied from a generic playbook.</p></div>
+        <div class="why-card"><div class="why-icon">🤝</div><div class="why-title">Direct Promoter Partnership</div><p class="why-text">We work directly with founders and promoters — not just HR teams. Recommendations are aligned to the real priorities and constraints at the top.</p></div>
+        <div class="why-card"><div class="why-icon">🌱</div><div class="why-title">Long-Term Growth Mindset</div><p class="why-text">We are not interested in quick fixes. Every system we design is built to scale, evolve, and compound in value as your organisation grows.</p></div>
+        <div class="why-card"><div class="why-icon">🎯</div><div class="why-title">Business-Aligned Frameworks</div><p class="why-text">Talent strategy that doesn't connect to business strategy is theatre. Everything we build is anchored to your specific growth goals.</p></div>
+        <div class="why-card"><div class="why-icon">🧭</div><div class="why-title">Contextual, Not Generic</div><p class="why-text">We adapt proven models to your organisation's unique stage, industry, and leadership realities. Deep contextual understanding of India's growth-stage businesses.</p></div>
+        <div class="why-card"><div class="why-icon">💡</div><div class="why-title">Senior-Led Advisory</div><p class="why-text">You work directly with Vaishnavi — not a junior consultant. Senior advisory expertise on every engagement, from diagnosis through implementation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process-sec">
+    <div class="process-inner">
+      <span class="section-label">How We Work</span>
+      <h2 class="section-title">Our Process</h2>
+      <div class="accent-bar"></div>
+      <div class="ptimeline">
+        <div class="pstep">
+          <div class="pdot">🔍</div>
+          <div>
+            <span class="pnum">Step 01</span>
+            <div class="ptitle">Understand & Assess</div>
+            <p class="pdesc">We begin with a deep diagnostic of your organisation's current talent systems, gaps, and growth ambitions. This involves structured conversations with leadership, data review, and our proprietary assessment framework. We surface what's unarticulated as much as what's visible.</p>
+          </div>
+        </div>
+        <div class="pstep">
+          <div class="pdot">✦</div>
+          <div>
+            <span class="pnum">Step 02</span>
+            <div class="ptitle">Design & Strategize</div>
+            <p class="pdesc">We co-create contextual, practical talent frameworks tailored to your industry, stage, and leadership realities. No templates, no copy-paste — everything is designed with your specific constraints and ambitions in mind. We present options, not mandates.</p>
+          </div>
+        </div>
+        <div class="pstep">
+          <div class="pdot">🚀</div>
+          <div>
+            <span class="pnum">Step 03</span>
+            <div class="ptitle">Implement & Optimise</div>
+            <p class="pdesc">We work alongside your team to embed systems, build internal capability, and iterate based on what the organisation is telling us. Implementation support means the work actually sticks — not just a polished deck that gathers dust.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <h2 class="cta-band-title">The objective is simple:<br>Build talent systems that scale.</h2>
+    <p class="cta-band-sub">Let's talk about where your organisation is today — and where you want it to be.</p>
+    <div class="cta-row">
+      <a href="#" onclick="goTo('contact')" class="btn-primary">Start a Conversation</a>
+      <a href="#" onclick="goTo('services')" class="btn-outline">View Our Services</a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Value Talent Advisory</span>
+    <div class="footer-links"><a href="#" onclick="goTo('home')">Home</a><a href="#" onclick="goTo('about')">About</a><a href="#" onclick="goTo('services')">Services</a><a href="#" onclick="goTo('whyus')">Why Us</a><a href="#" onclick="goTo('contact')">Contact</a></div>
+    <span class="footer-copy">© 2025 Value Talent Advisory. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<div id="page-contact" class="page">
+  <div class="contact-hero">
+    <span class="section-label">Get in Touch</span>
+    <h1 class="section-title" style="font-size:clamp(2.2rem,4vw,3.5rem);">Let's Start a Conversation</h1>
+    <div class="accent-bar center"></div>
+    <p style="color:var(--text-muted);font-size:1rem;font-weight:300;max-width:460px;margin:0 auto;line-height:1.75;">No obligation — just a candid conversation about where you are and what you're building.</p>
+  </div>
+
+  <div class="contact-main">
+    <div class="contact-grid">
+      <div>
+        <div class="form-group"><label>Your Name</label><input type="text" placeholder="Full name"></div>
+        <div class="form-group"><label>Company</label><input type="text" placeholder="Organisation name"></div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="you@company.com"></div>
+        <div class="form-group"><label>What are you looking to address?</label><textarea placeholder="Tell us about your organisation and the challenge you're navigating..."></textarea></div>
+        <button class="btn-primary" style="width:100%;padding:0.95rem;" onclick="alert('Thank you! We\'ll be in touch shortly.')">Send Message</button>
+      </div>
+      <div>
+        <div style="margin-bottom:1.8rem;">
+          <span class="ci-lbl">Email</span>
+          <div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9a0a7afa689bfa8a5bcacbda8a5aca7bda8adbfa0baa6bbb0e7a0a7">[email&#160;protected]</a></div>
+          <div class="ci-sub">We respond within 24 hours</div>
+        </div>
+        <hr class="c-divider">
+        <div style="margin-bottom:1.8rem;">
+          <span class="ci-lbl">LinkedIn</span>
+          <div class="ci-val">Value Talent Advisory</div>
+          <div class="ci-sub">Follow for insights on talent & leadership</div>
+        </div>
+        <hr class="c-divider">
+        <div style="margin-bottom:1.8rem;">
+          <span class="ci-lbl">Based In</span>
+          <div class="ci-val">India</div>
+          <div class="ci-sub">Working with organisations across India and globally</div>
+        </div>
+        <hr class="c-divider">
+        <div class="c-highlight">
+          <span class="ci-lbl">Ideal for</span>
+          <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.7;font-weight:300;margin-top:0.3rem;">Growth-stage companies, family businesses in transition, founders building their first HR function, and leadership teams preparing for scale.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Value Talent Advisory</span>
+    <div class="footer-links"><a href="#" onclick="goTo('home')">Home</a><a href="#" onclick="goTo('about')">About</a><a href="#" onclick="goTo('services')">Services</a><a href="#" onclick="goTo('whyus')">Why Us</a><a href="#" onclick="goTo('contact')">Contact</a></div>
+    <span class="footer-copy">© 2025 Value Talent Advisory. All rights reserved.</span>
+  </footer>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const el = document.getElementById('nav-' + page);
+  if (el) el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  return false;
+}
+window.addEventListener('scroll', () => {
+  docume
